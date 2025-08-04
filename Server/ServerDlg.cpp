@@ -201,14 +201,10 @@ void CServerDlg::OnBnClickedOk()
 
 	//GetDlgItem(IDC_MD5)->SetWindowText(Dencryption1.YUANWEN);
 
-	//产生随机数
-	int randomNumber[8];
+	int randomN;
 	//cout<<"生成8个0~9的随机数："<<endl; 
 	//一共插入8位伪码，获取使用次数的位数，生成随机数的个数为8 - n，n为使用次数的位数
 	int n = leftTime.GetLength();
-
-	for (int i = 0; i != (7 - n); ++i)
-		randomNumber[i] = rand() % 10;
 
 	int j = 0;
 	CString zhuceNumber(Dencryption1.YUANWEN);
@@ -225,9 +221,10 @@ void CServerDlg::OnBnClickedOk()
 	{
 		zhuceNumber.Insert(i, leftTime.GetAt(j++));
 	}
-	for (int i = 2 * (n+1); i < 16; i = i + 2)
+	for (int i = 2 * (n + 1); i < 16; i = i + 2)
 	{
-		zhuceNumber.Insert(i, static_cast<TCHAR>('0' + randomNumber[i]));
+		randomN = rand() % 10;
+		zhuceNumber.Insert(i, static_cast<TCHAR>('0' + randomN));
 	}
 	GetDlgItem(IDC_SN)->SetWindowText(zhuceNumber);
 	return;

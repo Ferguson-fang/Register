@@ -186,15 +186,6 @@ void CClientDlg::OnBnClickedOk()
 	mac_info = DiskInfo.GetMAC();
 	//GetDlgItem(IDC_EDIT_MAC)->SetWindowText(mac_info);
 
-	//获取硬盘ID
-
-	/*int b = DiskInfo.GetDiskInfo();
-	if (b == 0)
-	{
-		disk_info = DiskInfo.szSerialNumber;
-	}
-	else
-		disk_info = "";*/
 
 	//wmic方式获取磁盘ID
 	int w = DiskInfo.GetDiskSerialNumber();
@@ -204,33 +195,10 @@ void CClientDlg::OnBnClickedOk()
 	}
 	else
 		disk_info = "";
-	//m_edit->SetWindowTextA(DiskInfo.szModelNumber);	
-	//GetDlgItem(IDC_EDIT_HD)->SetWindowText(disk_info);
-
 	string tx = "";
 	int type = -1;
 
-	//CString info;
-	//if (type == -1 || tx == "")
-	//{
-	//	type = 0;
-	//	info = cpu_info;     //用于加密的信息
-	//	if (info.IsEmpty())
-	//	{
-	//		info = mac_info;
-	//		type = 1;
-	//		if (info.IsEmpty())
-	//		{
-	//			info = disk_info;
-	//			type = 2;
-	//			if (info.IsEmpty())
-	//			{
-	//				type = -1;
-	//				return;
-	//			}
-	//		}
-	//	}
-	//}
+	
 	CString info;
 	CString random[3] = { cpu_info, mac_info,disk_info };
 	//0代表cpu 1代表网络地址 2代表硬盘信息
@@ -290,14 +258,6 @@ void CClientDlg::OnBnClickedOk()
 	char *encryptTemp = (LPSTR)(LPCTSTR)hardwareInfo;//Cstring转char*
 	sz_strHardware = md5(encryptTemp).c_str();
 
-	//for (UINT i =0;i < strlen(encrypt);i++)			//一个字节是两个十六进制数
-	//{
-	//	CString str;
-	//	str.Format("%02x",encrypt[i]);
-	//	sz_str += str;
-	//}
-
-	//GetDlgItem(IDC_EDIT_MD5)->SetWindowText(sz_str);//MD5值32位
 
 	//随机矩阵处理时间数据     (产生秘钥)
 	CDynamicEncryption dynamic;
@@ -313,15 +273,12 @@ void CClientDlg::OnBnClickedOk()
 	/****************DES 加密***************************/
 
 	CString md5Str1 = sz_str.Mid(2, 8);
-	//CString md5Str2 = sz_str.Mid(12,8);
 	//分别进行加密
-	CDesTest DesTest1(md5Str1, key);  //CDesTest DesTest2(md5Str2,key);
-	DesTest1.initial();				 //DesTest2.initial();
+	CDesTest DesTest1(md5Str1, key);  
+	DesTest1.initial();				 
 	//加密
-	DesTest1.DESDIEDAI();			 //DesTest2.DESDIEDAI();
+	DesTest1.DESDIEDAI();			 
 	//显示密文
-	//DesTest1.MEWEN += DesTest2.MEWEN;
-	//GetDlgItem(IDC_EDIT_DES)->SetWindowText(DesTest1.MEWEN);
 	DesTest1.MEWEN += key;
 	GetDlgItem(IDC_EDIT_NUM)->SetWindowText(DesTest1.MEWEN);
 	nType = type;
@@ -329,15 +286,8 @@ void CClientDlg::OnBnClickedOk()
 }
 
 
-//05B2E519788ACC7ANIGGHIJH
-//2181c36840d7f76494601e9b0ad37f33
-//58715c7326488480
-
-
 void CClientDlg::OnBnClickedBtnRegis()
 {
-	//sz_str.Empty();
-	//GetDlgItem(IDC_EDIT_MD5)->GetWindowText(sz_str);
 
 	CString md5Str1 = sz_str.GetString();
 
@@ -355,7 +305,7 @@ void CClientDlg::OnBnClickedBtnRegis()
 	/*********************将原文逆（小）变换************************/
 	int len = desStr1.GetLength();
 
-	//取第一位数查看是否无数次
+	//取第0位数查看是否无数次
 	char first = desStr1.GetAt(0);
 	CString count = "";
 	if (first != '0')
@@ -378,9 +328,6 @@ void CClientDlg::OnBnClickedBtnRegis()
 		desStr1.Delete(i);
 	}
 
-	//registernum.SetAt(i,tempchar);
-
-	//if((registernum.Left(8)==sz_str.Mid(2,8))&&(registernum.Right(8)==sz_str.Mid(12,8)))
 	if (desStr1.Left(8) == sz_str.Mid(2, 8))
 	{
 
@@ -426,10 +373,6 @@ void CClientDlg::OnBnClickedBtnRegis()
 		file.open("yt.dat", ios::out);
 		file << DesTest1.MEWEN << '\n';
 		file.close();
-		/*fstream file;
-		file.open("yt.dat", ios::out);
-		file << count << '\n';
-		file.close();*/
 
 		MessageBox("注册成功！");
 		CDialogEx::OnOK();

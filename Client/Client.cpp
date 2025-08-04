@@ -88,7 +88,7 @@ BOOL CClientApp::InitInstance()
 		delete pShellManager;
 	}
 
-	/*
+	/*   客户端独立程序部分
 	 //与原有注册信息对比验证
 	{
 		int type = -1;
